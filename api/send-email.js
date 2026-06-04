@@ -1,25 +1,18 @@
 const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
-  // Cabeçalhos de Segurança CORS para permitir que o seu Painel HTML faça requisições
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Ou substitua '*' por 'https://geilsonlabsprojects.github.io' para maior segurança
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Manipulação de requisições de Preflight (OPTIONS) feita pelo navegador
+  // Resposta imediata para a requisição de pré-verificação (Preflight)
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    return res.status(200).send('OK');
   }
 
-  // Permite apenas chamadas via POST para maior segurança
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método não permitido. Utilize POST.' });
+    return res.status(405).json({ error: 'Método não permitido' });
   }
-
   const { to, subject, body } = req.body;
 
   // Validação simples dos campos requeridos
