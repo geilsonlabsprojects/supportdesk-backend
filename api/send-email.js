@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
-// Correção: Alterado de 'export default' para 'module.exports'
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   // Configuração de CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -43,7 +42,6 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ message: 'Enviado!' });
   } catch (error) {
-    // Retorna o erro exato caso as credenciais de e-mail estejam erradas
-    return res.status(500).json({ error: 'Erro no servidor', details: error.message });
+    return res.status(500).json({ error: 'Erro no servidor' });
   }
 }
