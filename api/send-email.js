@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 
-export default async function handler(req, res) {
+// Alterado de 'export default' para 'module.exports' para alinhar ao CommonJS
+module.exports = async function handler(req, res) {
   // Configuração de CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: 587,
-      secure: false,
+      secure: false, // false para a porta 587
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -42,6 +43,8 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ message: 'Enviado!' });
   } catch (error) {
-    return res.status(500).json({ error: 'Erro no servidor' });
+    // Crucial: Exibe o erro real no painel de Logs da Vercel para debug
+    console.error("Erro detalhado no transporte SMTP:", error); 
+    return res.status(500).json({ error: 'Erro no servidor', detalhes: error.message });
   }
 }
