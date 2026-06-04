@@ -1,18 +1,17 @@
 const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
-  // Define o domínio exato para maior segurança
-  res.setHeader('Access-Control-Allow-Origin', 'https://geilsonlabsprojects.github.io');
+  // Configuração explícita de CORS
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Ajuste para o seu domínio em produção
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  // Resposta para o Preflight (o navegador chama isso antes do POST)
+  // Resposta rápida para o navegador antes do envio real (Preflight)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Verifica se é um POST
+  // Bloqueio de métodos que não sejam POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido.' });
   }
@@ -20,14 +19,14 @@ export default async function handler(req, res) {
   const { to, subject, body } = req.body;
 
   if (!to || !subject || !body) {
-    return res.status(400).json({ error: 'Parâmetros incompletos.' });
+    return res.status(400).json({ error: 'Dados em falta: to, subject e body são obrigatórios.' });
   }
 
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: 465,
-      secure: true,
+      port: process.env.SMTP_PORT || 587,
+      secure: false, 
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -35,15 +34,16 @@ export default async function handler(req, res) {
     });
 
     await transporter.sendMail({
-      from: `\"Suporte\" <${process.env.SMTP_USER}>`,
+      from: `"Suporte Portal Escolar" <${process.env.SMTP_USER}>`,
       to,
       subject,
       text: body.replace(/<[^>]+>/g, ''),
-      html: body,
+      html: `<div style="font-family: sans-serif; padding: 20px;">${body}</div>`,
     });
 
     return res.status(200).json({ message: 'E-mail enviado com sucesso!' });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error('Erro ao enviar e-mail:', error);
+    return res.status(500).json({ error: 'Falha ao processar o envio do e-mail.' });
   }
 }
