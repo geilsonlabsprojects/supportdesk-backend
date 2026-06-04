@@ -408,7 +408,7 @@
                     <div class="flex justify-end gap-3 pt-4 border-t border-surface-800">
                         <button onclick="app.closeModal('modal-ticket')" class="btn-secondary px-4 py-2 rounded-lg text-xs font-semibold">Cancelar</button>
                         <button onclick="app.sendTicketReply()" id="btn-send-reply" class="btn-primary px-6 py-2 rounded-lg text-xs font-semibold flex items-center gap-2">
-                            <i class="fas fa-paper-plane"></i> Atualizar & Enviar
+                            <i class="fas fa-paper-plane"></i> Atribui & Envia
                         </button>
                     </div>
                 </div>
@@ -606,7 +606,7 @@
                 this.chartInstance = new Chart(ctx, {
                     type: 'line',
                     data: { labels: days, datasets: [{ label: 'Tickets Gerados', data: counts, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, tension: 0.3, fill: true, pointRadius: 3, pointBackgroundColor: '#60a5fa' }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } } }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: '#64748b' } } }
                 });
             }
 
