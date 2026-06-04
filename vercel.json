@@ -11,5 +11,16 @@
       "methods": ["POST", "OPTIONS"],
       "dest": "/api/send-email.js"
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        }
+      ]
+    }
   ]
 }
